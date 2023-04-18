@@ -1,0 +1,305 @@
+<?php
+function ValidateEmail($email)
+{
+   $pattern = '/^([0-9a-z]([-.\w]*[0-9a-z])*@(([0-9a-z])+([-\w]*[0-9a-z])*\.)+[a-z]{2,6})$/i';
+   return preg_match($pattern, $email);
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['formid']) && $_POST['formid'] == 'form2')
+{
+   $mailto = 'kiokoimmanuel028@gmail.com';
+   $mailfrom = isset($_POST['email']) ? $_POST['email'] : $mailto;
+   $subject = 'Portfolio Contact form';
+   $message = 'Values submitted from web site form:';
+   $success_url = '';
+   $error_url = '';
+   $eol = "\n";
+   $error = '';
+   $internalfields = array ("submit", "reset", "send", "filesize", "formid", "captcha", "recaptcha_challenge_field", "recaptcha_response_field", "g-recaptcha-response", "h-captcha-response");
+   $boundary = md5(uniqid(time()));
+   $header  = 'From: '.$mailfrom.$eol;
+   $header .= 'Reply-To: '.$mailfrom.$eol;
+   $header .= 'MIME-Version: 1.0'.$eol;
+   $header .= 'Content-Type: multipart/mixed; boundary="'.$boundary.'"'.$eol;
+   $header .= 'X-Mailer: PHP v'.phpversion().$eol;
+
+   try
+   {
+      if (!ValidateEmail($mailfrom))
+      {
+         $error .= "The specified email address (" . $mailfrom . ") is invalid!\n<br>";
+         throw new Exception($error);
+      }
+      $message .= $eol;
+      $message .= "IP Address : ";
+      $message .= $_SERVER['REMOTE_ADDR'];
+      $message .= $eol;
+      foreach ($_POST as $key => $value)
+      {
+         if (!in_array(strtolower($key), $internalfields))
+         {
+            if (is_array($value))
+            {
+               $message .= ucwords(str_replace("_", " ", $key)) . " : " . implode(",", $value) . $eol;
+            }
+            else
+            {
+               $message .= ucwords(str_replace("_", " ", $key)) . " : " . $value . $eol;
+            }
+         }
+      }
+      $body  = 'This is a multi-part message in MIME format.'.$eol.$eol;
+      $body .= '--'.$boundary.$eol;
+      $body .= 'Content-Type: text/plain; charset=UTF-8'.$eol;
+      $body .= 'Content-Transfer-Encoding: 8bit'.$eol;
+      $body .= $eol.stripslashes($message).$eol;
+      if (!empty($_FILES))
+      {
+         foreach ($_FILES as $key => $value)
+         {
+             if ($_FILES[$key]['error'] == 0)
+             {
+                $body .= '--'.$boundary.$eol;
+                $body .= 'Content-Type: '.$_FILES[$key]['type'].'; name='.$_FILES[$key]['name'].$eol;
+                $body .= 'Content-Transfer-Encoding: base64'.$eol;
+                $body .= 'Content-Disposition: attachment; filename='.$_FILES[$key]['name'].$eol;
+                $body .= $eol.chunk_split(base64_encode(file_get_contents($_FILES[$key]['tmp_name']))).$eol;
+             }
+         }
+      }
+      $body .= '--'.$boundary.'--'.$eol;
+      if ($mailto != '')
+      {
+         mail($mailto, $subject, $body, $header);
+      }
+      header('Location: '.$success_url);
+   }
+   catch (Exception $e)
+   {
+      $errorcode = file_get_contents($error_url);
+      $replace = "##error##";
+      $errorcode = str_replace($replace, $e->getMessage(), $errorcode);
+      echo $errorcode;
+   }
+   exit;
+}
+?>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Emmanuel Kioko </title>
+<meta name="generator" content="WYSIWYG Web Builder 18 - https://www.wysiwygwebbuilder.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="css/font-awesome.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+<link href="css/Portfolio_Manu.css" rel="stylesheet">
+<link href="css/Portfolio.css" rel="stylesheet">
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/jquery.ui.effect.min.js"></script>
+<script src="js/wb.panel.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/wwb18.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(event)
+{
+   var PanelMenu1 = document.querySelector('#wb_PanelMenu1');
+   var bsPanelMenu1 = new bootstrap.Tooltip(PanelMenu1, {offset:[0,14],placement:'left', html: true, sanitize: false, title: '<span style="color:#F5F5F5;font-family:Arial;font-size:13px;">Click the hamburger icon to open the menu</span>', trigger: 'manual', animation: true, customClass:'ToolTip1'});
+   PanelMenu1.addEventListener('inserted.bs.tooltip', function(e)
+   {
+      var tooltip = document.getElementById(e.target.getAttribute('aria-describedby'));
+      tooltip.classList.add('animate-show');
+   });
+   PanelMenu1.addEventListener('hide.bs.tooltip', function(e)
+   {
+      var tooltip = document.getElementById(e.target.getAttribute('aria-describedby'));
+      tooltip.classList.remove('animate-show');
+      var forceReflow = e.target.offsetWidth;
+   });
+});
+</script>
+<script>
+$(document).ready(function()
+{
+   $("#PanelLayer").panel({animate: true, animationDuration: 500, animationEasing: 'easeOutCubic', dismissible: true, display: 'overlay', position: 'right'});
+});
+</script>
+<!-- Insert Google Analytics code here -->
+</head>
+<body>
+<div id="container">
+<div id="wb_Shape8">
+<div id="Shape8"></div></div>
+<div id="wb_Shape4">
+<div id="Shape4"></div></div>
+<div id="wb_Shape14">
+<div id="Shape14"></div></div>
+<div id="wb_Shape7">
+<div id="Shape7"></div></div>
+<div id="wb_Shape3">
+<div id="Shape3"></div></div>
+<div id="wb_Shape1">
+<div id="Shape1"></div></div>
+<div id="wb_Shape2">
+<div id="Shape2"></div></div>
+<div id="wb_Image1">
+<img src="images/Manu1.jpg" id="Image1" alt="" width="361" height="449"></div>
+<div id="wb_Text2">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:37px;"><strong>Emmanuel Kioko</strong></span></div>
+<div id="wb_Text3">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:17px;">Hi there meet, a passionate graphic designer with a focus on branding and visual communication. I specialize in creating impactful designs that help businesses stand out in a crowded market.</span></div>
+<div id="wb_Image2">
+<img src="images/DSC_5406.jpg" id="Image2" alt="" width="310" height="465"></div>
+<div id="wb_Image3">
+<img src="images/Estty Oil Logo Update.png" id="Image3" alt="" width="258" height="324"></div>
+<div id="wb_Text6">
+<span style="color:#FFFFFF;font-family:Calibri;font-size:43px;"><strong>GALLERY</strong></span></div>
+<div id="wb_Text7">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:17px;">A Driven and ambitious young man with a passion for design. With a strong work ethic and a wilingness to learn, Emmanuel brings a fresh perspective and innovative ideas to the table, and is always looking for new opportunities to grow and develop professionally whether it's through collaboration or independent work.</span></div>
+<div id="wb_Text11">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-weight:700;font-size:32px;"><strong>My Designs/Projects</strong></span></div>
+<div id="wb_Text14">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;">Designs, logos, and posters are essential marketing tools for businesses looking to create a strong visual brand identity. They are designed to showcase the unique personality of a business and communicate its message to potential customers.<br><br>A great design can help a business stand out from its competitors and create a lasting impression on its target audience. A well-crafted logo can become an iconic symbol of the brand, instantly recognizable to customers. Posters are a powerful way to communicate a message, whether it's promoting a product or service or raising awareness of an event or cause. <br><br>Whether it's for personal use, small or large business dream it and together we will make your dream a reality<br><br>Here are some of my designs form posters to banners to logos, </span><span style="color:#1E90FF;font-family:'Open Sans';font-size:16px;"><u><a href="https://drive.google.com/drive/folders/1bOsWTOc0H0WWCA0-GqsruvwoOfjGyhss?usp=sharing" target="_blank" title="Emmanuel&apos;s Designs">https://drive.google.com/drive/folders/1bOsWTOc0H0WWCA0-GqsruvwoOfjGyhss?usp=sharing</a></u></span><span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;"><br></span><span style="color:#FFFFFF;font-family:'Open Sans';font-size:20px;"><br></span></div>
+<a id="Button1" href="#aboutme">LEARN MORE</a>
+<div id="wb_PanelMenu1">
+<a href="#PanelLayer" id="PanelMenu1" onclick="bootstrap.Tooltip.getInstance('#wb_PanelMenu1').hide();return true;return false;">
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"></span>
+</a>
+</div>
+<div id="PanelLayer">
+<div id="wb_CssMenu1">
+<ul id="CssMenu1" role="menubar" class="nav">
+<li role="menuitem" class="nav-item firstmain"><a class="nav-link" href="#Home" target="_self"><i class="fa fa-arrow-right">&nbsp;</i>&nbsp;Start&nbsp;Here</a>
+</li>
+<li role="menuitem" class="nav-item"><a class="nav-link" href="#projects" target="_self"><i class="fa fa-arrow-right">&nbsp;</i>Projects</a>
+</li>
+<li role="menuitem" class="nav-item"><a class="nav-link" href="#aboutme" target="_self"><i class="fa fa-arrow-right">&nbsp;</i>&nbsp;About</a>
+</li>
+<li role="menuitem" class="nav-item"><a class="nav-link" href="#contact" target="_self"><i class="fa fa-arrow-right">&nbsp;</i>Contact</a>
+</li>
+<li role="menuitem" class="nav-item"><a class="nav-link" href="#skills" target="_self"><i class="fa fa-arrow-right">&nbsp;</i>Skills&nbsp;and&nbsp;Accolades</a>
+</li>
+</ul>
+
+</div>
+<div id="wb_Card9" class="card">
+   <div id="Card9-card-body">
+      <div id="Card9-card-item0"><a href="https://www.linkedin.com/services/page/b6832a320802852635" target="_blank"><i class="fa fa-linkedin"></i></a></div>
+      <div id="Card9-card-item1"><i class="fa fa-twitter"></i></div>
+      <div id="Card9-card-item2"><a href="https://wa.me/+254724091189" target="_blank"><i class="fa fa-whatsapp"></i></a></div>
+   </div>
+</div>
+</div>
+<div id="wb_Image11">
+<img src="images/Qosh Logo Circle.png" id="Image11" alt="" width="309" height="309"></div>
+<div id="wb_Image12">
+<img src="images/Etsy Oil Avocado shape bg.png" id="Image12" alt="" width="272" height="329"></div>
+<div id="wb_Shape5">
+<div id="Shape5"></div></div>
+<div id="wb_Text5">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:19px;"><em>A well-designed logo should be simple, memorable, timeless, and versatile, and it should evoke positive emotions and associations with the brand. Ultimately, the essence of a logo is to create a visual representation of a brand that resonates with its target audience and helps to establish a strong brand identity.</em></span></div>
+<div id="wb_Image14">
+<img src="images/DSC_Qosh Improved.jpg" id="Image14" alt="" width="270" height="405"></div>
+<div id="wb_Image15">
+<img src="images/Manu.jpg" id="Image15" alt="" width="291" height="362"></div>
+<div id="wb_Shape6">
+<div id="Shape6"></div></div>
+<div id="wb_Text8">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-weight:700;font-size:48px;"><strong>About</strong></span><span style="color:#FFFFFF;font-family:Calibri;font-size:48px;"><strong> Me</strong></span></div>
+<div id="wb_Text9">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;"><em>Hello, I'm Emmanuel Kioko, a passionate and creative graphic designer with a focus on branding and visual communication. With over 3 years of experience in the industry. <br><br>I have developed a keen eye for detail and a strong sense of design aesthetics. I specialize in creating unique and impactful designs that help businesses stand out in a crowded market.<br><br> My skills include logo design, typography, layout design, posters, banners and illustration. I am constantly learning and experimenting with new techniques to improve my craft and provide the best possible solutions for my clients. <br><br>Let's collaborate and create something amazing together</em></span></div>
+
+<script>
+var wb_Timer1;
+function TimerStartTimer1()
+{
+   wb_Timer1 = setTimeout(function()
+   {
+      var event = null;
+      bootstrap.Tooltip.getInstance('#wb_PanelMenu1').show();
+   }, 1000);
+}
+function TimerStopTimer1()
+{
+   clearTimeout(wb_Timer1);
+}
+TimerStartTimer1();
+</script>
+<div id="wb_aboutme">
+<div id="aboutme"></div>
+</div>
+<div id="wb_Text4">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-weight:700;font-size:37px;"><strong>LOGO DESIGN</strong></span></div>
+<div id="wb_Gallery">
+<div id="Gallery"></div>
+</div>
+<div id="wb_projects">
+<div id="projects"></div>
+</div>
+<div id="wb_Home">
+<div id="Home"></div>
+</div>
+<div id="wb_Text1">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-weight:700;font-size:27px;"><strong>Skills and Accolades</strong></span></div>
+<div id="wb_Text10">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;">Logo Design<br>Poster Design<br>Banner Design<br>Adverts<br>Website Design<br>Other Related Designs</span></div>
+<div id="wb_Text13">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;">Adobe Illustrator<br>Adobe Photoshop<br>Corel Draw<br>Artcut<br>Figma<br>Anaconda Navigator</span></div>
+<div id="wb_Text15">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;">Bachelor of Science in Computer Science<br>CCNA Certification</span></div>
+<div id="wb_Text17">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;">Python<br>Html/Css<br>Php<br>Javascript<br>VBA</span></div>
+<div id="wb_Text18">
+<span style="color:#FF0000;font-family:'Open Sans';font-weight:700;font-size:27px;"><strong>Designs</strong></span></div>
+<div id="wb_Text19">
+<span style="color:#FF0000;font-family:'Open Sans';font-weight:700;font-size:27px;"><strong>Tools</strong></span></div>
+<div id="wb_Text20">
+<span style="color:#FF0000;font-family:'Open Sans';font-weight:700;font-size:27px;"><strong>Certifications</strong></span></div>
+<div id="wb_Text21">
+<span style="color:#FF0000;font-family:'Open Sans';font-weight:700;font-size:27px;"><strong>Languages</strong></span></div>
+<div id="wb_skills">
+<div id="skills"></div>
+</div>
+<div id="wb_Text22">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-weight:700;font-size:37px;"><strong>Contact</strong></span></div>
+<div id="wb_Text23">
+<span style="color:#FFFFFF;font-family:'Open Sans';font-size:16px;">Love what you have seen?, Drop me a message and let's start our next project together, I am looking forward to working with you</span></div>
+<div id="wb_Form1">
+<form name="Contact" method="post" action="<?php echo basename(__FILE__); ?>" enctype="multipart/form-data" id="Form1">
+<input type="text" id="Editbox4" name="name" value="" spellcheck="false" placeholder="Name">
+<input type="text" id="Editbox5" name="email" value="" spellcheck="false" placeholder="E-mail">
+<input type="text" id="Editbox6" name="message" value="" spellcheck="false" placeholder="Message">
+<input type="submit" id="Button2" name="" value="Send message">
+<div id="wb_Form2">
+<form name="contact" method="post" action="<?php echo basename(__FILE__); ?>" enctype="multipart/form-data" id="Form2">
+<input type="hidden" name="formid" value="form2">
+</form>
+</div>
+</form>
+</div>
+<div id="wb_contact">
+<div id="contact"></div>
+</div>
+</div>
+<div id="PageFooter1">
+<div id="wb_Text16">
+<span style="color:#979797;font-family:Arial;font-size:13px;">Copyright (c) 2023 Emmanuel Kioko.</span></div>
+<div id="wb_Image4">
+<a href="https://goo.gl/maps/uEAv241sLYqAcsp76" target="_blank"><img src="images/Map Nairobi county.png" id="Image4" alt="" width="576" height="298"></a></div>
+<div id="wb_Text25">
+<span style="color:#979797;font-family:Arial;font-size:13px;">Copyright (c) 2023 Emmanuel Kioko.</span></div>
+<div id="wb_Text24">
+<span style="color:#9C9C9C;font-family:Arial;font-size:15px;"><strong>ADDRESS</strong><br>Nairobi, Kenya<br><br><strong>CONTACTS</strong><br>Email: kiokoimmanuel028@gmail.com<br>Phone: +254724 091189<br></span></div>
+<div id="wb_Image5">
+<a href="https://goo.gl/maps/uEAv241sLYqAcsp76" target="_blank"><img src="images/Map Nairobi county.png" id="Image5" alt="" width="571" height="295"></a></div>
+<div id="wb_Image6">
+<a href="https://goo.gl/maps/uEAv241sLYqAcsp76" target="_blank"><img src="images/Map Nairobi county.png" id="Image6" alt="" width="571" height="295"></a></div>
+<div id="wb_Text12">
+<span style="color:#9C9C9C;font-family:Arial;font-size:15px;"><strong>ADDRESS</strong><br>Nairobi, Kenya<br><br><strong>CONTACTS</strong><br>Email: kiokoimmanuel028@gmail.com<br>Phone: +254724 091189<br></span></div>
+<div id="wb_Text29">
+<span style="color:#9C9C9C;font-family:Arial;font-size:9.3px;"><strong>ADDRESS</strong><br>Nairobi, Kenya<br><br><strong>CONTACTS</strong><br>Email: kiokoimmanuel028@gmail.com<br>Phone: +254724 091189<br></span></div>
+</div>
+</body>
+</html>
