@@ -149,7 +149,7 @@ a:hover
 }
 #Shape7
 {
-   width: 317px;
+   width: 311px;
    height: 400px;
    background-color: #573220;
    background-image: none;
@@ -165,7 +165,7 @@ a:hover
    flex-direction: column;
     left: 0.32%;
    top: 0.25%;
-   width: 99.37%;
+   width: 99.36%;
    height: 99.5%;
    box-sizing: border-box;
    overflow: hidden;
@@ -1452,7 +1452,7 @@ a:hover
 {
    position: absolute;
    left: 90px;
-   top: 1434px;
+   top: 1430px;
    width: 310px;
    height: 424px;
    z-index: 26;
@@ -1798,8 +1798,8 @@ a:hover
 {
    position: absolute;
    left: 128px;
-   top: 1500px;
-   width: 317px;
+   top: 1490px;
+   width: 311px;
    height: 400px;
    z-index: 19;
 }
