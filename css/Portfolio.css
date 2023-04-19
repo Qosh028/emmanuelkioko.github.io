@@ -1264,7 +1264,7 @@ a:hover
 }
 #wb_Text5 
 {
-   background-color: rgba(128,128,128,0.40);
+   background-color: rgba(128,128,128,0.80);
    background-image: none;
    border: 0px solid #000000;
    border-radius: 0px;
@@ -1473,7 +1473,7 @@ a:hover
    left: 280px;
    top: 1066px;
    width: 561px;
-   height: 80px;
+   height: 73px;
    z-index: 61;
 }
 #projects
@@ -2118,15 +2118,11 @@ body
    display: inline;
    margin: 0;
    padding: 1px 6px 1px 6px;
-   color: #FFFFFF;
    font-size: 19px;
    font-family: "Open Sans";
    font-weight: normal;
    font-style: normal;
    text-decoration: none;
-   background-color: #3C3C3C;
-   background-image: none;
-   border: 0px solid #3C3C3C;
 }
 #Button1
 {
@@ -2176,9 +2172,6 @@ body
    left: 788px;
    top: 30px;
    width: 306px;
-   background-color: #3C3C3C;
-   background-image: none;
-   border: 0px solid #CCCCCC;
 }
 #PanelLayer_panel
 {
@@ -3142,15 +3135,11 @@ body
    display: inline;
    margin: 0;
    padding: 1px 6px 1px 6px;
-   color: #FFFFFF;
    font-size: 13px;
    font-family: "Open Sans";
    font-weight: normal;
    font-style: normal;
    text-decoration: none;
-   background-color: #3C3C3C;
-   background-image: none;
-   border: 0px solid #3C3C3C;
 }
 #Button1
 {
@@ -3200,9 +3189,6 @@ body
    left: 1201px;
    top: 30px;
    width: 306px;
-   background-color: #3C3C3C;
-   background-image: none;
-   border: 0px solid #CCCCCC;
 }
 #PanelLayer_panel
 {
@@ -4166,15 +4152,11 @@ body
    display: inline;
    margin: 0;
    padding: 1px 6px 1px 6px;
-   color: #FFFFFF;
    font-size: 11px;
    font-family: "Open Sans";
    font-weight: normal;
    font-style: normal;
    text-decoration: none;
-   background-color: #3C3C3C;
-   background-image: none;
-   border: 0px solid #3C3C3C;
 }
 #Button1
 {
@@ -4224,9 +4206,6 @@ body
    left: 960px;
    top: 24px;
    width: 244px;
-   background-color: #3C3C3C;
-   background-image: none;
-   border: 0px solid #CCCCCC;
 }
 #PanelLayer_panel
 {
